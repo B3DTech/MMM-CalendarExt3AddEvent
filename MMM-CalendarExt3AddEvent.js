@@ -28,7 +28,7 @@ Module.register("MMM-CalendarExt3AddEvent", {
   start: function () {
     this.loaded = false;
     this.modalVisible = false;
-  
+    this.currentInputKey = null;
     //Wait for MMM-ClanedarExt3 to show up in the DOM
     setTimeout(() => {
       this.setupCalendarObserver();
@@ -99,8 +99,33 @@ Module.register("MMM-CalendarExt3AddEvent", {
     if (notification === "CALENDAR_EXT3_RENDERED") {
       this.injectPlusButtons();
     }
-    if (notification === "DOM_OBJECTS_CREATED") {
-    // Attach close and submit event listeners for the modal
+    if (notification === "KEYBOARD_INPUT" && payload.key) {
+      // Compare the key to see which input we're editing
+      console.log("Got KEYBOARD_INPUT for key=", payload.key, "message=", payload.message);
+
+      // Example 1: If we only have one input open at a time, we could do:
+      // if (payload.key === this.currentInputKey) { ...insert text... }
+
+      // Example 2: Distinguish each input by a unique key
+      if (payload.key === "CE3AddEventTitle") {
+        let container = document.getElementById("CE3AddEventModalContainer");
+        if (container) {
+          const titleInput = container.querySelector("#ce3-add-event-title");
+          if (titleInput) titleInput.value = payload.message;
+        }
+      } else if (payload.key === "CE3AddEventLocation") {
+        let container = document.getElementById("CE3AddEventModalContainer");
+        if (container) {
+          const locationInput = container.querySelector("#ce3-add-event-location");
+          if (locationInput) locationInput.value = payload.message;
+        }
+      }
+      // etc. for date/time if you want text-based input
+    }
+  if (notification === "DOM_OBJECTS_CREATED") {
+   // Attach Keyboard listener
+      this.attachKeyboardListeners(); 
+   // Attach close and submit event listeners for the modal
       const closeBtn = document.getElementById("ce3AddEventCloseBtn");
       if (closeBtn) {
         closeBtn.addEventListener("click", () => this.hideModal());
@@ -125,6 +150,41 @@ Module.register("MMM-CalendarExt3AddEvent", {
     } else if (notification === "CE3_OAUTH_ERROR") {
       console.error("OAuth error:", payload);
     }
+  },
+
+  attachKeyboardListeners: function() {
+    const container = document.getElementById("CE3AddEventModalContainer");
+    if (!container) return;
+
+    // For example, the Title field:
+    const titleInput = container.querySelector("#ce3-add-event-title");
+    if (titleInput) {
+      // On focus or click, we open the keyboard with key="CE3AddEventTitle"
+      titleInput.addEventListener("focus", () => {
+        console.log("Opening keyboard for Title Input");
+        this.currentInputKey = "CE3AddEventTitle";
+        this.sendNotification("KEYBOARD", { 
+          key: "CE3AddEventTitle", 
+          style: "default" 
+        });
+      });
+    }
+
+    // For example, the Location field:
+    const locationInput = container.querySelector("#ce3-add-event-location");
+    if (locationInput) {
+      locationInput.addEventListener("focus", () => {
+        console.log("Opening keyboard for Location Input");
+        this.currentInputKey = "CE3AddEventLocation";
+        this.sendNotification("KEYBOARD", { 
+          key: "CE3AddEventLocation", 
+          style: "default" 
+        });
+      });
+    }
+
+    // Repeat the pattern for date/time if you want to type them as text, or
+    // just rely on the user picking them from a separate UI.
   },
 
   injectPlusButtons: function () {
@@ -157,13 +217,22 @@ Module.register("MMM-CalendarExt3AddEvent", {
     const container = document.getElementById("CE3AddEventModalContainer");
     if (container) {
       container.style.display = "block";
+
       const dateInput = container.querySelector("#ce3-add-event-date");
-      if (dateInput) dateInput.value = selectedDate || "";
+      if (dateInput) {
+        dateInput.value = selectedDate || "";
+      }
+
+      const titleInput =  container.querySelector("#ce3-add-event-title");
+      if (titleInput) {
+        titleInput.focus();
+      }
+
+      const locationInput = container.querySelector("#ce3-add-event-location");
+      if (locationInput) {
+        /*locationInput.focus()*/;
+      }
     }
-   const titleInput =  container.querySelector("#ce3-add-event-title");
-   if (titleInput) { titleInput.focus(); }
-   const locationInput = container.querySelector("#ce3-add-event-location");
-   if (locationInput) { locationInput.focus(); } 
   },
 
   hideModal: function () {
