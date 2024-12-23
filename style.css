@@ -1,0 +1,106 @@
+/* style.css for MMM-CalendarExt3AddEvent */
+
+/* 
+  The plus button that appears on each calendar day cell.
+  You may need to adjust positioning or z-index to fit your layout.
+*/
+.CE3AddEventPlus {
+  display: inline-block;
+  position: absolute; /* If you want it in the corner of the day cell */
+  bottom: 4px;           /* Adjust to position the plus sign */
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  font-size: 16px;
+  line-height: 16px;
+  background-color: #4caf50;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 9999; /* Ensure it appears above calendar text */
+}
+
+/* 
+  The modal container for the "Add Event" popup.
+  We use fixed positioning to center it on the screen.
+  The "display: none" is toggled by JavaScript to "block" when shown.
+*/
+.CE3AddEventModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-width: 90%; /* For smaller screens, avoid going too wide */
+  background-color: #222;
+  color: #fff;
+  border-radius: 8px;
+  padding: 1em;
+  display: none; /* Hidden by default; toggled with JavaScript */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Header area containing the title and close button */
+.CE3AddEventHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Close button (the X) */
+.CE3AddEventClose {
+  cursor: pointer;
+  font-size: 1.4em;
+  margin-left: 0.5em;
+}
+
+/* Main body of the modal - form rows */
+.CE3AddEventBody {
+  margin-bottom: 1em;
+}
+
+/* A row with a label and input/select */
+.CE3AddEventRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.7em;
+}
+
+.CE3AddEventRow label {
+  width: 80px;
+  font-weight: 600;
+  margin-right: 0.5em;
+}
+
+/* Inputs and selects get standard styling */
+.CE3AddEventRow input,
+.CE3AddEventRow select {
+  flex: 1;
+  padding: 0.4em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #000;   /* Black text inside fields */
+}
+
+/* Footer area with the "Save" button */
+.CE3AddEventFooter {
+  text-align: right;
+}
+
+#ce3AddEventSubmitBtn {
+  padding: 0.6em 1.2em;
+  background-color: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+#ce3AddEventSubmitBtn:hover {
+  background-color: #0b7dda;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "MMM-CalendarExt3AddEvent",
+  "version": "1.0.0",
+  "description": "MagicMirror² module that extends MMM-CalendarExt3 with 'Add Event' functionality for Google Calendar via OAuth2.",
+  "main": "MMM-CalendarExt3AddEvent.js",
+  "scripts": {
+    "start": "node node_helper.js",
+    "authorize": "node authorize.js"
+  },
+  "keywords": [
+    "magicmirror",
+    "calendar",
+    "google-calendar",
+    "module"
+  ],
+  "author": "B3DTech",
+  "license": "MIT",
+  "dependencies": {
+    "googleapis": "^108.0.0"
+  }
+}
