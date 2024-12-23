@@ -16,7 +16,8 @@ const path = require("path");
 const http = require("http");
 const url = require("url");
 const { google } = require("googleapis");
-const open = require("open");
+const openModule = require("open");
+const open = openModule.default || openModule;
 
 const CREDENTIALS_PATH = path.join(__dirname, "credentials.json");
 const TOKEN_PATH = path.join(__dirname, "token.json");

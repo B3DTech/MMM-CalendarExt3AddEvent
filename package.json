@@ -16,6 +16,7 @@
   "author": "B3DTech",
   "license": "MIT",
   "dependencies": {
-    "googleapis": "^108.0.0"
+    "googleapis": "^108.0.0",
+    "open": "^10.1.0"
   }
 }
